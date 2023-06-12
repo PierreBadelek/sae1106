@@ -3,6 +3,7 @@ package sae.view;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -37,7 +38,25 @@ public class EventLabyConfig implements EventHandler{
         if (event.getSource() instanceof Button){
             Button b = (Button) event.getSource();
             if (event.getSource().toString().contains("Lancer le jeu")) {
-                this.labyC.LaunchGame();
+
+                if (laby.getNbLoup() != 1){
+                    Alert warn=new Alert(Alert.AlertType.WARNING);
+                    warn.setContentText("Le nombre de Loup est incorrect, il doit y en avoir 1");
+                    warn.show();
+
+                } if (laby.getNbMouton() != 1){
+                    Alert warn=new Alert(Alert.AlertType.WARNING);
+                    warn.setContentText("Le nombre de Mouton est incorrect, il doit y en avoir 1");
+                    warn.show();
+
+                }if (laby.getNbSortie() != 1) {
+                    Alert warn = new Alert(Alert.AlertType.WARNING);
+                    warn.setContentText("Le nombre de Sortie est incorrect, il doit y en avoir 1");
+                    warn.show();
+                }
+                if (laby.getNbMouton() == 1 && laby.getNbSortie() == 1 && laby.getNbLoup() == 1) {
+                    this.labyC.LaunchGame();
+                }
 
             }else if (event.getSource().toString().contains("Configuration Suivante")) {
                 this.labyC.initAnimalConfig();

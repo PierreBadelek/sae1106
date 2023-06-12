@@ -314,12 +314,16 @@ public class Labyrinthe {
     public ArrayList<Case> getVoisinNord(int vision, Case maCase) throws Exception {
         ArrayList<Case> lesVoisins = new ArrayList<>();
         int i = 1;
+        Case v = TrouverCaseXY(maCase.getPosX(), maCase.getPosY()-i);
+        if (v.getElement() instanceof Rocher) { return lesVoisins;};
         while (i != vision+1 ) {
-            System.out.println("???55?");
-            if (! (maCase.getPosX() - i <0)){
+
+            if (! (maCase.getPosY() - i <0 )){
+                System.out.println("cc = " + maCase.getPosX() + maCase.getPosY());
+
+
                 Case voisin = TrouverCaseXY(maCase.getPosX(), maCase.getPosY()-i);
                 Rectangle r =(Rectangle) voisin.getLeStack().getChildren().get(0);
-                r.setFill(Color.LIGHTBLUE);
 
 
                 System.out.println(voisin.getElement().toString());
@@ -330,17 +334,26 @@ public class Labyrinthe {
 
                     i++;
                 } else {
-                    if (getVoisinEst(1, maCase).size() != 0){
-                       lesVoisins.add((Case) getVoisinEst(1,voisin).get(0));
+                    voisin = lesVoisins.get(lesVoisins.size()-1);
+                    if (getVoisinEst(1, voisin).size() != 0){
+                        lesVoisins.add((Case) getVoisinEst(1,lesVoisins.get(lesVoisins.size()-1)).get(0));
+                        maCase = lesVoisins.get(lesVoisins.size()-1);
+
                         i++;
-                    }  else if (getVoisinOuest(1, maCase).size() != 0){
-                        lesVoisins.add((Case) getVoisinOuest(1,voisin).get(0));
+                    }  else if (getVoisinOuest(1, voisin).size() != 0){
+                        lesVoisins.add((Case) getVoisinOuest(1,lesVoisins.get(lesVoisins.size()-1)).get(0));
+                        maCase = lesVoisins.get(lesVoisins.size()-1);
                         i++;
+
                     } else if (getVoisinOuest(1, voisin).size() == 0 && getVoisinEst(1, voisin).size() == 0){
-                        i ++;
+                        i = vision+1;
+
+
                     }
                 }
 
+            } else {
+                i ++;
             }
         }
         return lesVoisins;
@@ -349,12 +362,15 @@ public class Labyrinthe {
     public ArrayList<Case> getVoisinSud(int vision, Case maCase) throws Exception {
         ArrayList<Case> lesVoisins = new ArrayList<>();
         int i = 1;
+        Case v = TrouverCaseXY(maCase.getPosX(), maCase.getPosY()+i);
+        if (v.getElement() instanceof Rocher) { return lesVoisins;};
         while (i != vision+1 ) {
-            System.out.println("????");
-            if (! (maCase.getPosX() - i <0)){
+
+            if (! (maCase.getPosY() - i <0 )){
+
+
                 Case voisin = TrouverCaseXY(maCase.getPosX(), maCase.getPosY()+i);
                 Rectangle r =(Rectangle) voisin.getLeStack().getChildren().get(0);
-                r.setFill(Color.LIGHTBLUE);
 
 
                 System.out.println(voisin.getElement().toString());
@@ -365,17 +381,26 @@ public class Labyrinthe {
 
                     i++;
                 } else {
+                    voisin = lesVoisins.get(lesVoisins.size()-1);
                     if (getVoisinEst(1, voisin).size() != 0){
-                        lesVoisins.add((Case) getVoisinEst(1,voisin).get(0));
+                        lesVoisins.add((Case) getVoisinEst(1,lesVoisins.get(lesVoisins.size()-1)).get(0));
+                        maCase = lesVoisins.get(lesVoisins.size()-1);
+
                         i++;
                     }  else if (getVoisinOuest(1, voisin).size() != 0){
-                        lesVoisins.add((Case) getVoisinOuest(1,voisin).get(0));
+                        lesVoisins.add((Case) getVoisinOuest(1,lesVoisins.get(lesVoisins.size()-1)).get(0));
+                        maCase = lesVoisins.get(lesVoisins.size()-1);
                         i++;
+
                     } else if (getVoisinOuest(1, voisin).size() == 0 && getVoisinEst(1, voisin).size() == 0){
                         i = vision+1;
+
+
                     }
                 }
 
+            } else {
+                i ++;
             }
         }
         return lesVoisins;
@@ -384,12 +409,14 @@ public class Labyrinthe {
     public ArrayList<Case> getVoisinEst(int vision, Case maCase) throws Exception {
         ArrayList<Case> lesVoisins = new ArrayList<>();
         int i = 1;
+        Case v = TrouverCaseXY(maCase.getPosX()+i, maCase.getPosY());
+        if (v.getElement() instanceof Rocher) { return lesVoisins;};
         while (i != vision+1 ) {
-            System.out.println("????");
-            if (! (maCase.getPosX() - i <0)){
+            if (! (maCase.getPosY() - i <0 )){
+
+
                 Case voisin = TrouverCaseXY(maCase.getPosX()+i, maCase.getPosY());
                 Rectangle r =(Rectangle) voisin.getLeStack().getChildren().get(0);
-                r.setFill(Color.LIGHTBLUE);
 
 
                 System.out.println(voisin.getElement().toString());
@@ -400,17 +427,26 @@ public class Labyrinthe {
 
                     i++;
                 } else {
+                    voisin = lesVoisins.get(lesVoisins.size()-1);
                     if (getVoisinNord(1, voisin).size() != 0){
-                        lesVoisins.add((Case) getVoisinNord(1,voisin).get(0));
+                        lesVoisins.add((Case) getVoisinNord(1,lesVoisins.get(lesVoisins.size()-1)).get(0));
+                        maCase = lesVoisins.get(lesVoisins.size()-1);
+
                         i++;
                     }  else if (getVoisinSud(1, voisin).size() != 0){
-                        lesVoisins.add((Case) getVoisinSud(1,voisin).get(0));
+                        lesVoisins.add((Case) getVoisinSud(1,lesVoisins.get(lesVoisins.size()-1)).get(0));
+                        maCase = lesVoisins.get(lesVoisins.size()-1);
                         i++;
-                    } else if (getVoisinSud(1, voisin).size() == 0 && getVoisinNord(1, voisin).size() == 0){
+
+                    } else if (getVoisinNord(1, voisin).size() == 0 && getVoisinSud(1, voisin).size() == 0){
                         i = vision+1;
+
+
                     }
                 }
 
+            } else {
+                i ++;
             }
         }
         return lesVoisins;
@@ -419,12 +455,12 @@ public class Labyrinthe {
     public ArrayList<Case> getVoisinOuest(int vision, Case maCase) throws Exception {
         ArrayList<Case> lesVoisins = new ArrayList<>();
         int i = 1;
+        Case v = TrouverCaseXY(maCase.getPosX()-i, maCase.getPosY());
+        if (v.getElement() instanceof Rocher) { return lesVoisins;};
         while (i != vision+1 ) {
-            System.out.println("????");
-            if (! (maCase.getPosX() - i <0)){
+            if (! (maCase.getPosY() - i <0 )){
                 Case voisin = TrouverCaseXY(maCase.getPosX()-i, maCase.getPosY());
                 Rectangle r =(Rectangle) voisin.getLeStack().getChildren().get(0);
-                r.setFill(Color.LIGHTBLUE);
 
 
                 System.out.println(voisin.getElement().toString());
@@ -433,24 +469,58 @@ public class Labyrinthe {
                     lesVoisins.add(voisin);
                     System.out.println("Voisin Trouvé");
 
+
                     i++;
                 } else {
                     if (getVoisinNord(1, voisin).size() != 0){
                         lesVoisins.add((Case) getVoisinNord(1,voisin).get(0));
                         i++;
+
                     }  else if (getVoisinSud(1, voisin).size() != 0){
                         lesVoisins.add((Case) getVoisinSud(1,voisin).get(0));
                         i++;
-                    } else if (getVoisinSud(1, voisin).size() == 0 && getVoisinNord(1, voisin).size() == 0){
+
+                    } else if (getVoisinNord(1, voisin).size() == 0 && getVoisinSud(1, voisin).size() == 0){
                         i = vision+1;
                     }
                 }
 
+            } else {
+                i ++;
             }
         }
         return lesVoisins;
     }
 
+    public int getNbLoup() {
+        int count = 0;
+        for (Case c : this.lesCases) {
+            if (c.getElement() instanceof Loup){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getNbMouton() {
+        int count = 0;
+        for (Case c : this.lesCases) {
+            if (c.getElement() instanceof Mouton){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getNbSortie() {
+        int count = 0;
+        for (Case c : this.lesCases) {
+            if (c.getSortie()){
+                count++;
+            }
+        }
+        return count;
+    }
 
 }
 
