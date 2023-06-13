@@ -12,9 +12,12 @@ public class Display extends Application {
     WelcomeScreen welcs;
     @Override
     public void start(Stage stage) {
-        WelcomeScreen welcs = new WelcomeScreen(this);
+        this.welcs = new WelcomeScreen(this);
     }
 
+    public void returnToWelcs(){
+        welcs.show();
+    }
 
     public void openConfig(Spinner nbligne, Spinner nbcolonne) throws Exception {
         Labyrinthe l = new Labyrinthe((Integer) nbligne.getValue(), (Integer) nbcolonne.getValue());

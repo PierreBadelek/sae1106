@@ -7,8 +7,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.effect.Bloom;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -30,40 +34,36 @@ public class WelcomeScreen extends Stage {
         EventWelcomeScreen lesevent = new EventWelcomeScreen(this.display, this);
 
         /* Création des textes et des polices */
-        Font fontTitle = new Font("montserrat", 80);
-        Font fontLiCo = new Font("montserrat", 20);
-        Font fontSubTitle = new Font("montserrat", 25);
-        Font fontDimLab = new Font("montserrat", 20);
+        Font fontText = new Font("Montserrat", 20);
+
         Text textTitle = new Text(50, 50, "BIENVENUE");
+        Text textSubTitle = new Text("Pour commencer à jouer, \n paramétrer votre partie.\n");
+        Text textDimLab = new Text("Dimensions du labyrinthe :");
         Text textColo = new Text("Nombre de colonnes  ");
         Text textLigne = new Text("Nombre de lignes  ");
-        Text textSubTitle = new Text("Pour commencer à jouer, \n paramétrez votre partie.\n");
-        Text textDimLab = new Text("Dimensions du labyrinthe :");
         Text textName = new Text("Pierre - Lilou - Riwan - William");
         Text textPassLigne = new Text("\n");
 
         /* Styles des textes */
-        textDimLab.setStyle("-fx-font-weight: bold;");
-        textTitle.setStyle("-fx-font-weight: bold;");
-        textLigne.setStyle("-fx-font-weight: bold;");
-        textColo.setStyle("-fx-font-weight: bold;");
-        textTitle.setFont(fontTitle);
-        textColo.setFont(fontLiCo);
-        textLigne.setFont(fontLiCo);
-        textSubTitle.setFont(fontSubTitle);
-        textDimLab.setFont(fontDimLab);
-        textName.setFont(fontLiCo);
+        textTitle.setStyle("-fx-font-size: 80px; -fx-font-weight: bold; -fx-font-family: Monserrat");
+        textTitle.setFill(Color.DARKSEAGREEN);
+        Bloom bloom = new Bloom();
+        bloom.setThreshold(0.4);
+        textTitle.setEffect(bloom);
+
+        textSubTitle.setStyle("-fx-font-size: 20px; -fx-font-family: Monserrat");
+        textDimLab.setStyle("-fx-font-size: 20px; -fx-font-weight: bold; -fx-font-family: Monserrat;");
+        textColo.setFont(fontText);
+        textLigne.setFont(fontText);
+        textName.setFont(fontText);
         textDimLab.setUnderline(true);
 
-        /* Boutons */
+        /* Boutons et Events */
         Button CreateGame = new Button("Créer la partie");
-        Button LoadGame = new Button("Charger la partie");
-        CreateGame.setFont(fontDimLab);
-        LoadGame.setFont(fontDimLab);
-
-
-        /* Events */
+        CreateGame.setFont(fontText);
         CreateGame.setOnMouseClicked(lesevent);
+        Button LoadGame = new Button("Charger la partie");
+        LoadGame.setFont(fontText);
         LoadGame.setOnMouseClicked(lesevent);
 
         /* Configuration des spinners */
@@ -80,7 +80,8 @@ public class WelcomeScreen extends Stage {
         VBox vboxCoLi = new VBox();
         HBox hboxColo = new HBox();
         HBox hboxLigne = new HBox();
-        VBox vboxButton = new VBox(10);
+        VBox vboxButton = new VBox(20);
+        HBox hBoxNames = new HBox(20);
         Insets is50 = new Insets(50);
 
         /* Styles des containers */
@@ -90,6 +91,14 @@ public class WelcomeScreen extends Stage {
         hboxColo.setAlignment(Pos.CENTER);
         hboxLigne.setAlignment(Pos.CENTER);
         vboxButton.setAlignment(Pos.CENTER);
+        hBoxNames.setAlignment(Pos.CENTER);
+
+        /* Images près des noms */
+        Image loup = new Image("/loup.png");
+        ImageView imageLoup = new ImageView(loup);
+
+        Image mouton = new Image("/mouton.png");
+        ImageView imageMouton = new ImageView(mouton);
 
         /* Ajout des éléments aux containers */
         vboxTitle.getChildren().setAll(new Node[]{textTitle, textSubTitle});
@@ -97,7 +106,8 @@ public class WelcomeScreen extends Stage {
         hboxLigne.getChildren().setAll(new Node[]{textLigne, this.ligneSpin});
         vboxCoLi.getChildren().setAll(new Node[]{hboxColo, hboxLigne});
         vboxButton.getChildren().setAll(new Node[]{CreateGame, LoadGame, textName});
-        vboxMain.getChildren().setAll(new Node[]{vboxTitle, textDimLab, vboxCoLi, textPassLigne, vboxButton});
+        hBoxNames.getChildren().setAll(new Node[]{imageLoup,textName,imageMouton});
+        vboxMain.getChildren().setAll(new Node[]{vboxTitle, textDimLab, vboxCoLi, textPassLigne, vboxButton, hBoxNames});
 
         /* Configurations globales */
         Scene scene = new Scene(vboxMain, 600, 600);

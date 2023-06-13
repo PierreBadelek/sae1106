@@ -73,11 +73,15 @@ public class EventLabyConfig implements EventHandler{
                 this.labyC.initMapConf();
             } else if (event.getSource().toString().contains("Tour suivant")){
                 try {
-                    laby.prochainTour();
+                    laby.prochainTour(this.labyC);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
+            } else if (event.getSource().toString().contains("Menu principal")) {
+                labyC.close();
+                dp.returnToWelcs();
             }
+
 
         }
         if (event.getSource() instanceof StackPane) {
@@ -92,7 +96,8 @@ public class EventLabyConfig implements EventHandler{
                 StackPane stack = (StackPane) event.getSource();
                 Case lc = laby.TrouverCaseStackPane(stack);
                 try {
-                    ArrayList<Case> voisins = laby.getVoisinNord(5,lc);
+                    ArrayList<Case> voisins = laby.getAllVoisins(lc,5);
+
                     for (Case c : voisins){
                         System.out.println(c.getPosX() +" " + c.getPosY());
                         StackPane s = c.getLeStack();

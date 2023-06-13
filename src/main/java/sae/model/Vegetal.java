@@ -19,7 +19,9 @@ public abstract class Vegetal extends ElementCase {
     public int getCapaciteDeplacement() {
         return capaciteDeplacement;
     }
-
+    public int getCptRepousse() {
+        return this.cptRepousse;
+    }
     public boolean estMange() {
         return estMange;
     }
@@ -27,7 +29,6 @@ public abstract class Vegetal extends ElementCase {
     public boolean getAccessibilite() {
         return accessibilite;
     }
-
 
 
     protected void checkRepousse(){

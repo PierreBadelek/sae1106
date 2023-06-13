@@ -7,7 +7,7 @@ public abstract class Animal extends ElementCase {
     private int vitesse;
     public Animal(Case lacase) {
         super(lacase);
-        this.vitesse = 5;
+        this.vitesse = 2;
 
     }
 
@@ -16,5 +16,12 @@ public abstract class Animal extends ElementCase {
 
     public abstract void deplacement();
 
+    public int getVitesse() {
+        return vitesse;
+    }
+
+    public void setVitesse(int vitesse) {
+        this.vitesse = vitesse;
+    }
 }
 
