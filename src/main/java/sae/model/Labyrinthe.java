@@ -226,7 +226,16 @@ public class Labyrinthe {
                     } else if (a instanceof Mouton){
                         System.out.println("Mouton "+ a.getLacase().getPosX() + " et " + a.getLacase().getPosY());
                         int vitesse = a.getVitesse();
-                        Case nextCase = this.TrouverCaseXY(a.getLacase().getPosX()+vitesse,a.getLacase().getPosY());
+                        Case nextCase = c;
+
+                        for (int i = 0; i <= vitesse; i++){
+                           nextCase = this.TrouverCaseXY(a.getLacase().getPosX()+i,a.getLacase().getPosY());
+                           if (!(nextCase.getElement() instanceof Rocher) && nextCase.getSortie()) {
+                               labyC.sheepWin();
+                               break;
+                           }
+
+                        }
 
                         Vegetal laplante = (Vegetal) nextCase.getElement();
                         a.setVitesse(laplante.getCapaciteDeplacement());
@@ -479,8 +488,12 @@ public class Labyrinthe {
         ArrayList<Case> lesVoisins = new ArrayList<>();
         int i = 1;
         int inc = 1;
-        Case v = TrouverCaseXY(maCase.getPosX()+i, maCase.getPosY());
-        if (v.getElement() instanceof Rocher) { return lesVoisins;};
+        Case v = maCase;
+        if (! (maCase.getPosX() + inc > nbcolonne )){
+            v = TrouverCaseXY(maCase.getPosX()+inc, maCase.getPosY());
+            if (v.getElement() instanceof Rocher) { return lesVoisins;};
+        }
+
         while (i != vision+1 ) {
 
             if (! (maCase.getPosX() + inc > nbcolonne )){
@@ -624,6 +637,121 @@ public class Labyrinthe {
         }
         return count;
     }
+
+    public Case getlaSortie() {
+        int count = 0;
+        for (Case c : this.lesCases) {
+            if (c.getSortie()){
+                return c;
+            }
+        }
+        return null;
+    }
+
+
+    // PARCOURS EN LARGEUR //
+    public void Parcourir(Case Depart, Case Sortie) throws Exception {
+        System.out.println("PARCOURS");
+        int inc = 1;
+        Sortie.setPoids(inc);
+
+        ArrayList<Case> File = new ArrayList<>();
+        ArrayList<Case> current = new ArrayList<>();
+
+        current.add(Sortie);
+        File.add(current.get(0));
+
+        boolean recherche = true;
+        while (recherche){
+            ArrayList<Case> AllSuivants = new ArrayList<>();
+            for (Case cur : current){
+                ArrayList<Case> lesSuivants = getAllVoisins(cur,1);
+
+                for (Case next: lesSuivants){
+                    if (!(File.contains(next))){
+                        AllSuivants.add(next);
+                        next.setPoids(inc);
+                        File.add(next);
+                        if (next == Depart){
+                            next.setPoids(858585);
+                            recherche = false;
+                        }
+                    }
+
+                }
+            }
+            current = AllSuivants;
+            inc++;
+        }
+        //afficherLabPoids();
+
+    }
+
+    //public ArrayList<Case> TrouverLeChemin(Case Sortie) throws Exception {
+//
+    //    ArrayList<Case> File = new ArrayList<>();
+    //    Case current = Sortie;
+//
+//
+    //    File.add(current);
+//
+    //    boolean recherche = true;
+    //    while (recherche){
+    //        ArrayList<Case> AllSuivants = new ArrayList<>();
+    //        for (Case cur : current){
+    //            ArrayList<Case> lesSuivants = getAllVoisins(cur,1);
+//
+    //            for (Case next: lesSuivants){
+    //                if (!(File.contains(next))){
+    //                    AllSuivants.add(next);
+    //                    next.setPoids(inc);
+    //                    File.add(next);
+    //                    if (next == Depart){
+    //                        next.setPoids(858585);
+    //                        recherche = false;
+    //                    }
+    //                }
+//
+    //            }
+    //        }
+    //        current = AllSuivants;
+    //        inc++;
+    //    }
+//
+    //}
+    public void afficherLabPoids() throws Exception {
+
+
+        for (int i = 0; i <= this.getNbligne()-1 ; i++) {
+            for (int j = 0; j <= this.getNbcolonne()-1 ; j++) {
+                Case lc = (Case) this.TrouverCaseXY(j, i);
+
+                if (lc.getPosX() == nbcolonne-1) {
+                    if (!(lc.getElement() instanceof Rocher)){
+                        System.out.print(lc.getPoids() +"\n ");
+
+                    }else{
+                        System.out.print(lc.getElement().toString() +"\n ");
+                    }
+
+                } else {
+                    if (!(lc.getElement() instanceof Rocher)){
+                        System.out.print(lc.getPoids() +"\t ");
+
+                    } else{
+                        System.out.print(lc.getElement().toString() +"\t ");
+
+                    }
+                }
+
+
+
+            }
+        }
+
+    }
+
+
 
 }
 

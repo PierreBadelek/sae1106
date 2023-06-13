@@ -26,6 +26,7 @@ public class Display extends Application {
 
     public void LoadConfig(String path) throws Exception {
         Labyrinthe l = new Labyrinthe(path);
+
         LabyConfig lc = new LabyConfig(l,this);
     }
 

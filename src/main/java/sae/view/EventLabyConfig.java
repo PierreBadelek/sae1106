@@ -95,8 +95,12 @@ public class EventLabyConfig implements EventHandler{
 
                 StackPane stack = (StackPane) event.getSource();
                 Case lc = laby.TrouverCaseStackPane(stack);
+
+
+
                 try {
                     ArrayList<Case> voisins = laby.getAllVoisins(lc,5);
+                    laby.Parcourir(lc,laby.getlaSortie());
 
                     for (Case c : voisins){
                         System.out.println(c.getPosX() +" " + c.getPosY());

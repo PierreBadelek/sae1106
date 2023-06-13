@@ -8,7 +8,7 @@ import java.util.Stack;
 
 public class Case {
     private boolean sortie;
-
+    private int Poids = 99;
     private int posX;
 
     private ElementCase element;
@@ -59,4 +59,11 @@ public class Case {
     }
 
 
+    public int getPoids() {
+        return Poids;
+    }
+
+    public void setPoids(int poids) {
+        Poids = poids;
+    }
 }
