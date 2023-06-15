@@ -19,6 +19,8 @@ public class Mouton extends Animal {
     }
 
     public Case deplacement(Labyrinthe l, Case c, LabyConfig labyC) throws Exception {
+        boolean doitfuir = l.isChasse();
+
         System.out.println("Mouton "+ this.getLacase().getPosX() + " et " + this.getLacase().getPosY());
         int vitesse = this.getVitesse();
         Case nextCase = c;
@@ -26,7 +28,7 @@ public class Mouton extends Animal {
         boolean trouve = true;
         boolean sortie = false;
         for (Case test : l.getAllVoisins(this.getLacase(),5)){
-            if (test.getSortie() && !(sortie) ){
+            if (test.getSortie() && !(sortie) && doitfuir ){
                 labyC.sheepWin();
                 trouve = false;
                 nextCase = test;
@@ -68,10 +70,9 @@ public class Mouton extends Animal {
             if (nextChemin.size()<=vitesse){
                 vitesse = nextChemin.size()-1;
             }
-            System.out.println(vitesse);
             nextCase = nextChemin.get(vitesse);
             /* Vérification pour savoir si l'on est sur la sortie */
-            if (!(nextCase.getElement() instanceof Rocher) && nextCase.getSortie() && !(sortie))  {
+            if (!(nextCase.getElement() instanceof Rocher) && nextCase.getSortie() && !(sortie) && doitfuir )  {
                 labyC.sheepWin();
                 sortie = true;
                 break;
@@ -82,8 +83,8 @@ public class Mouton extends Animal {
         this.setVitesse(laplante.getCapaciteDeplacement());
 
         if (! (this.getLacase().getPosX()+vitesse >= l.getNbcolonne() || this.getLacase().getPosY()+1 >= l.getNbligne())){
-            if (! (nextCase.getElement() instanceof Rocher)&& !(sortie)){
-                if (nextCase.getSortie()){
+            if (! (nextCase.getElement() instanceof Rocher)&& !(sortie)  ){
+                if (nextCase.getSortie() && doitfuir){
                     labyC.sheepWin();
                     sortie = true;
                 }

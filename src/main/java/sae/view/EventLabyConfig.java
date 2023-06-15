@@ -80,6 +80,21 @@ public class EventLabyConfig implements EventHandler{
             } else if (event.getSource().toString().contains("Menu principal")) {
                 labyC.close();
                 dp.returnToWelcs();
+            } else if (event.getSource().toString().contains("Parcours en profondeur")) {
+                try {
+                    ArrayList<Case> Chemin = laby.Parcourir(laby.getMouton(), laby.getlaSortie());
+                    for (Case c: Chemin){
+                        StackPane lestack = c.getLeStack();
+                        for (Node n: lestack.getChildren()){
+                            if (n instanceof Rectangle){
+                                ((Rectangle) n).setFill(Color.LIGHTPINK);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
             }
 
 
@@ -91,42 +106,6 @@ public class EventLabyConfig implements EventHandler{
 
             } else if (labyC.isAnimalConfig() == true && labyC.isVegetalConfig() == false){
                 cellChangeTypeAnimal(event);
-            } else {
-
-                StackPane stack = (StackPane) event.getSource();
-                Case lc = laby.TrouverCaseStackPane(stack);
-
-
-
-                try {
-                    ArrayList<Case> voisins = laby.getAllVoisins(lc,5);
-                    //ArrayList<Case> resultat = laby.Parcourir(lc,laby.getlaSortie());
-
-                    for (Case c : voisins){
-                        System.out.println(c.getPosX() +" " + c.getPosY());
-                        StackPane s = c.getLeStack();
-                        for (Node n : s.getChildren()){
-                            if (n instanceof Rectangle){
-                                System.out.println("c");
-                                ((Rectangle) n).setFill(Color.LIGHTBLUE);
-                            }
-                        }
-                    }
-
-                    //for (Case c : resultat){
-                    //    System.out.println(c.getPosX() +" " + c.getPosY());
-                    //    StackPane s = c.getLeStack();
-                    //    for (Node n : s.getChildren()){
-                    //        if (n instanceof Rectangle){
-                    //            System.out.println("c");
-                    //            ((Rectangle) n).setFill(Color.LIGHTPINK);
-                    //        }
-                    //    }
-                    //}
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
             }
         }
     }

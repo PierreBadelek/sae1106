@@ -1,4 +1,6 @@
 package sae.model;
+import sae.view.LabyConfig;
+
 import java.util.*;
 
 /* Classe parente de Loup et Mouton */
@@ -17,5 +19,8 @@ public abstract class Animal extends ElementCase {
     public void setVitesse(int vitesse) {
         this.vitesse = vitesse;
     }
-}
+    public abstract Case deplacement(Labyrinthe l, Case c, LabyConfig labyC) throws Exception;
+
+
+    }
 

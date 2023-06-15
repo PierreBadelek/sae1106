@@ -286,11 +286,16 @@ public class LabyConfig extends Stage {
         nextTour.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
         nextTour.setOnMouseClicked(this.EventMain);
 
+        Button AlgoBut = new Button("Parcours en profondeur");
+        AlgoBut.setFont(new Font("monserrat",20));
+        AlgoBut.setStyle("-fx-text-fill: black; -fx-font-size: 20px; -fx-focus-color: transparent; -fx-faint-focus-color: transparent;");
+        AlgoBut.setOnMouseClicked(this.EventMain);
+
         HBox hboxMain = new HBox();
         hboxMain.getChildren().addAll(this.leLabyAff);
         VBox vboxMain = new VBox();
         vboxMain.setPadding(new Insets(50));
-        vboxMain.getChildren().addAll(title,hboxMain,nextTour);
+        vboxMain.getChildren().addAll(title,hboxMain,nextTour, AlgoBut);
         vboxMain.setAlignment(Pos.TOP_CENTER);
         hboxMain.setAlignment(Pos.CENTER);
         vboxMain.setStyle("-fx-background-color: #D6D6D6;");
