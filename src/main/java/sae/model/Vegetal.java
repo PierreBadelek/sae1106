@@ -1,5 +1,6 @@
 package sae.model;
 
+/* Classe parente de Marguerite, Cactus et Herbe */
 public abstract class Vegetal extends ElementCase {
     protected int capaciteDeplacement;
     protected boolean estMange = false;
@@ -8,9 +9,7 @@ public abstract class Vegetal extends ElementCase {
 
     public Vegetal(Case lc) {
         super(lc);
-
     }
-
 
     public void manger() {
         this.estMange = true;
@@ -30,16 +29,16 @@ public abstract class Vegetal extends ElementCase {
         return accessibilite;
     }
 
-
     protected void checkRepousse(){
         if (this.estMange == true && this.cptRepousse+1 < 2){
-            this.cptRepousse = this.cptRepousse + 1;
-        } else if (this.cptRepousse >= 2 ){
+            this.cptRepousse++;
+        } else {
             repousse();
         }
     }
 
     public void repousse(){
         this.estMange = false;
+        this.cptRepousse = 0;
     }
 }

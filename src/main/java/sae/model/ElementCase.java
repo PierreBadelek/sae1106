@@ -1,5 +1,6 @@
 package sae.model;
 
+/* Contenu dans une Case */
 public class ElementCase {
     protected Case lacase;
     protected String imageURL;
@@ -17,7 +18,4 @@ public class ElementCase {
         this.lacase = newCase;
     }
     public String getImageURL(){return this.imageURL;}
-
-
-
 }

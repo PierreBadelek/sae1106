@@ -1,5 +1,6 @@
 package sae.model;
 
+/* Classe enfant de Végétal */
 public class Cactus extends Vegetal {
     public Cactus(Case lc) {
         super(lc);
@@ -9,7 +10,6 @@ public class Cactus extends Vegetal {
         this.imageURL = "/cactus.png";
     }
     public String toString(){
-
         return "c";
     }
 }

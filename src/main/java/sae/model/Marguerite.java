@@ -1,5 +1,6 @@
 package sae.model;
 
+/* Classe enfant de Végétal */
 public class Marguerite extends Vegetal {
 
     public Marguerite(Case lc) {
@@ -10,10 +11,7 @@ public class Marguerite extends Vegetal {
         this.imageURL = "/fleur.png";
     }
 
-
-
     public String toString(){
-
         return "f";
     }
 }

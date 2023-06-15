@@ -1,5 +1,6 @@
 package sae.model;
 
+/* Classe enfant de Végétal */
 public class Herbe extends Vegetal {
 
     public Herbe(Case lc) {

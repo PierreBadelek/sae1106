@@ -1,5 +1,6 @@
 package sae.model;
 
+/* Classe d'un rocher */
 public class Rocher extends ElementCase {
     protected boolean accessibilite;
 
@@ -10,7 +11,6 @@ public class Rocher extends ElementCase {
     }
 
     public String toString(){
-
         return "x";
     }
 }

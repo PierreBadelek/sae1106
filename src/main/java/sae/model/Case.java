@@ -1,18 +1,18 @@
 package sae.model;
 
-
 import javafx.scene.layout.StackPane;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
+/* Classe d'une Case contenant un ElementCase */
 public class Case {
     private boolean sortie;
     private int Poids = 99;
     private int posX;
 
     private ElementCase element;
-    private StackPane leStack;
+    private StackPane leStack; /* Contient le carré et l'image (JavaFX) */
     private int posY;
 
     public Case(int x, int y) {
@@ -20,9 +20,7 @@ public class Case {
         this.posY = y;
         this.sortie = false;
         this.leStack = new StackPane();
-
     }
-
 
     public void setSortie(boolean sortie) {
         this.sortie = sortie;
@@ -34,7 +32,6 @@ public class Case {
     public void ajouterElementCase(ElementCase elementCase){
         this.element = elementCase;
     }
-
 
     public void modifierElementCase(ElementCase newEle){
         this.element = newEle;
@@ -57,7 +54,6 @@ public class Case {
     public StackPane getLeStack(){
         return this.leStack;
     }
-
 
     public int getPoids() {
         return Poids;

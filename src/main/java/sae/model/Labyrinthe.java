@@ -13,11 +13,10 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-
 public class Labyrinthe {
-
     private int nbcolonne;
     private int nbligne;
     private ArrayList<Case> lesCases;
@@ -32,6 +31,7 @@ public class Labyrinthe {
         loadLaby(path);
     }
 
+    /* Permet de charger un labyrinthe depuis un fichier texte */
     public void loadLaby(String filePath) throws Exception {
         if (filePath.length() <= 1){
             throw new Exception("Le chemin du dossier n'est pas correcte");
@@ -114,20 +114,20 @@ public class Labyrinthe {
         return this.nbligne;
     }
 
+    /* Génération du labyrinthe vide */
     public void genererLab() {
-
         System.out.println(this.nbcolonne);
         System.out.println(this.nbligne);
         this.lesCases = new ArrayList<>();
         for (int i = 0; i <= this.nbcolonne-1 ; i++) {
             for (int j = 0; j <= this.nbligne-1 ; j++) {
-
                 this.lesCases.add(new Case(i, j));
             }
         }
         initCase();
     }
 
+        /* Initialisation des éléments du labyrinthe */
     public void initCase() {
         for (Case macase : this.lesCases) {
 
@@ -151,10 +151,8 @@ public class Labyrinthe {
 
     }
 
-
+    /* Affichage du labyrinthe dans la console */
     public void afficherLab() throws Exception {
-
-
         for (int i = 0; i <= this.getNbligne()-1 ; i++) {
             for (int j = 0; j <= this.getNbcolonne()-1 ; j++) {
                 Case lc = (Case) this.TrouverCaseXY(j, i);
@@ -165,12 +163,8 @@ public class Labyrinthe {
                 } else {
                     System.out.print(lc.getElement().toString() + "\t");
                 }
-
-
-
             }
         }
-
     }
 
     public ArrayList getlesCases(){
@@ -180,7 +174,6 @@ public class Labyrinthe {
     public Case TrouverCaseXY(int x, int y) throws Exception {
         if (x < 0 || y < 0){
             throw new Exception("Les entrées x et Y sont invalide");
-
         }
         for (Case macase : this.lesCases) {
             if (macase.getPosX() == x && macase.getPosY() == y){
@@ -199,6 +192,7 @@ public class Labyrinthe {
         return null;
     }
 
+    /* Permet de passer au tour suivant */
     public void prochainTour(LabyConfig labyC) throws Exception {
         ArrayList<Case> Claim = new ArrayList<Case>();
         for (Case c : this.lesCases){
@@ -213,51 +207,18 @@ public class Labyrinthe {
                         if (! (a.getLacase().getPosX()+1 >= nbcolonne || a.getLacase().getPosY()+1 >= nbligne)){
                             if (! (nextCase.getElement() instanceof Rocher)){
                                 Case old = a.getLacase();
+                                ElementCase oldEle = a.getLacase().getElement();
                                 a.changeCase(nextCase);
                                 nextCase.modifierElementCase(a);
                                 new Herbe(old);
                                 EditCell(old);
                                 EditCell(nextCase);
                                 Claim.add(nextCase);
-
                             }
                         }
 
                     } else if (a instanceof Mouton){
-                        System.out.println("Mouton "+ a.getLacase().getPosX() + " et " + a.getLacase().getPosY());
-                        int vitesse = a.getVitesse();
-                        Case nextCase = c;
-
-                        for (int i = 0; i <= vitesse; i++){
-                           nextCase = this.TrouverCaseXY(a.getLacase().getPosX()+i,a.getLacase().getPosY());
-                           if (!(nextCase.getElement() instanceof Rocher) && nextCase.getSortie()) {
-                               labyC.sheepWin();
-                               break;
-                           }
-
-                        }
-
-                        Vegetal laplante = (Vegetal) nextCase.getElement();
-                        a.setVitesse(laplante.getCapaciteDeplacement());
-
-                        if (! (a.getLacase().getPosX()+vitesse >= nbcolonne || a.getLacase().getPosY()+1 >= nbligne)){
-                            if (! (nextCase.getElement() instanceof Rocher)){
-                                if (nextCase.getSortie()){
-                                    labyC.sheepWin();
-                                }
-                                Case old = a.getLacase();
-                                a.changeCase(nextCase);
-                                nextCase.modifierElementCase(a);
-
-                                Herbe h = new Herbe(old);
-                                h.manger();
-                                EditCell(old);
-                                EditCell(nextCase);
-                                Claim.add(nextCase);
-
-
-                            }
-                        }
+                        Claim.add(((Mouton) a).deplacement(this,c,labyC));
                     }
 
                 } else if(c.getElement() instanceof Vegetal){
@@ -269,22 +230,21 @@ public class Labyrinthe {
                     EditCell(c);
                 }
             }
-
         }
-
-
     }
 
 
     public void EditCell(Case lc){
         StackPane stack = lc.getLeStack();
 
-
         if (lc.getElement() instanceof Vegetal){
 
             Vegetal veg = (Vegetal) lc.getElement();
             if (veg.estMange() == false){
-                stack.getChildren().remove(1);
+                try {
+                    stack.getChildren().remove(1);
+                } catch (Exception ignored) {
+                }
                 ImageView imageView = new ImageView();
                 Image image = new Image(lc.getElement().getImageURL());
                 imageView.setImage(image);
@@ -299,7 +259,11 @@ public class Labyrinthe {
                 }
             }
         } else {
-            stack.getChildren().remove(1);
+            try {
+                stack.getChildren().remove(1);
+            }  catch (Exception ignored) {
+
+        }
             ImageView imageView = new ImageView();
             Image image = new Image(lc.getElement().getImageURL());
             imageView.setImage(image);
@@ -307,9 +271,9 @@ public class Labyrinthe {
             imageView.setFitHeight(45);
             stack.getChildren().addAll(imageView);
         }
-
     }
 
+    /* Sauvegarder un labyrinthe dans un fichier texte */
     public void saveLaby(String path) {
         String name = path+"/LabyData.txt";
 
@@ -333,9 +297,6 @@ public class Labyrinthe {
                             writer.write(lc.getElement().toString());
                         }
                     }
-
-
-
                 }
             }
 
@@ -348,8 +309,8 @@ public class Labyrinthe {
         }
     }
 
+    /* Vérifie si la case est une bordure */
     public boolean isBordure(Case macase) {
-
 
     if (macase.getPosX() == 0) {
         return true;
@@ -364,6 +325,7 @@ public class Labyrinthe {
     }
     }
 
+    /* Vérifie si c'est une case voisine */
     public boolean isVoisin(Case lacase, ArrayList<Case> lesVoisins){
         for (Case c: lesVoisins){
             if (c == lacase){
@@ -384,11 +346,13 @@ public class Labyrinthe {
             if (! (maCase.getPosY() - inc <0 )){
                 System.out.println("cc = " + maCase.getPosX() + maCase.getPosY());
 
-
                 Case voisin = TrouverCaseXY(maCase.getPosX(), maCase.getPosY()-inc);
                 Rectangle r =(Rectangle) voisin.getLeStack().getChildren().get(0);
 
-
+                if (voisin.getSortie()){
+                    lesVoisins.add(voisin);
+                    break;
+                }
                 System.out.println(voisin.getElement().toString());
 
                 if (!(voisin.getElement() instanceof Rocher)){
@@ -442,7 +406,10 @@ public class Labyrinthe {
 
                 Case voisin = TrouverCaseXY(maCase.getPosX(), maCase.getPosY()+inc);
                 Rectangle r =(Rectangle) voisin.getLeStack().getChildren().get(0);
-
+                if (voisin.getSortie()){
+                    lesVoisins.add(voisin);
+                    break;
+                }
 
                 System.out.println(voisin.getElement().toString());
 
@@ -471,17 +438,13 @@ public class Labyrinthe {
 
                     } else if (getVoisinOuest(1, voisin).size() == 0 && getVoisinEst(1, voisin).size() == 0){
                         i = vision+1;
-
-
                     }
                 }
-
             } else {
                 i ++;
             }
         }
         return lesVoisins;
-
     }
 
     public ArrayList<Case> getVoisinEst(int vision, Case maCase) throws Exception {
@@ -501,7 +464,10 @@ public class Labyrinthe {
 
                 Case voisin = TrouverCaseXY(maCase.getPosX()+inc, maCase.getPosY());
                 Rectangle r =(Rectangle) voisin.getLeStack().getChildren().get(0);
-
+                if (voisin.getSortie()){
+                    lesVoisins.add(voisin);
+                    break;
+                }
 
                 System.out.println(voisin.getElement().toString());
 
@@ -528,7 +494,6 @@ public class Labyrinthe {
                         i = vision+1;
                     }
                 }
-
             } else {
                 i ++;
             }
@@ -553,7 +518,10 @@ public class Labyrinthe {
 
 
                 System.out.println(voisin.getElement().toString());
-
+                if (voisin.getSortie()){
+                    lesVoisins.add(voisin);
+                    break;
+                }
                 if (!(voisin.getElement() instanceof Rocher)){
                     lesVoisins.add(voisin);
                     System.out.println("Voisin Trouvé");
@@ -650,7 +618,28 @@ public class Labyrinthe {
 
 
     // PARCOURS EN LARGEUR //
-    public void Parcourir(Case Depart, Case Sortie) throws Exception {
+    public ArrayList<Case> getAllVoisinsParcours(Case lc, int vision) throws Exception {
+        ArrayList<Case> vNord = getVoisinNord(vision,lc);
+        ArrayList<Case> vSud = getVoisinSud(vision,lc);
+        ArrayList<Case> vOuest = getVoisinOuest(vision,lc);
+
+        ArrayList<Case> vAll = new ArrayList<>();
+        for (Case c : vNord){
+            vAll.add(c);
+        }
+
+        for (Case c : vOuest){
+            vAll.add(c);
+        }
+        for (Case c : vSud){
+            vAll.add(c);
+        }
+
+        return vAll;
+    }
+
+    /* Placement des poids sur le labyrinthe correspondant à la distance entre le départ et la sortie */
+    public ArrayList<Case> Parcourir(Case Depart, Case Sortie) throws Exception {
         System.out.println("PARCOURS");
         int inc = 1;
         Sortie.setPoids(inc);
@@ -665,7 +654,7 @@ public class Labyrinthe {
         while (recherche){
             ArrayList<Case> AllSuivants = new ArrayList<>();
             for (Case cur : current){
-                ArrayList<Case> lesSuivants = getAllVoisins(cur,1);
+                ArrayList<Case> lesSuivants = getAllVoisinsParcours(cur,1);
 
                 for (Case next: lesSuivants){
                     if (!(File.contains(next))){
@@ -683,44 +672,64 @@ public class Labyrinthe {
             current = AllSuivants;
             inc++;
         }
-        //afficherLabPoids();
+        afficherLabPoids();
+        return TrouverLeChemin(Sortie);
 
     }
 
-    //public ArrayList<Case> TrouverLeChemin(Case Sortie) throws Exception {
-//
-    //    ArrayList<Case> File = new ArrayList<>();
-    //    Case current = Sortie;
-//
-//
-    //    File.add(current);
-//
-    //    boolean recherche = true;
-    //    while (recherche){
-    //        ArrayList<Case> AllSuivants = new ArrayList<>();
-    //        for (Case cur : current){
-    //            ArrayList<Case> lesSuivants = getAllVoisins(cur,1);
-//
-    //            for (Case next: lesSuivants){
-    //                if (!(File.contains(next))){
-    //                    AllSuivants.add(next);
-    //                    next.setPoids(inc);
-    //                    File.add(next);
-    //                    if (next == Depart){
-    //                        next.setPoids(858585);
-    //                        recherche = false;
-    //                    }
-    //                }
-//
-    //            }
-    //        }
-    //        current = AllSuivants;
-    //        inc++;
-    //    }
-//
-    //}
-    public void afficherLabPoids() throws Exception {
+    /* Trouve le chemin le plus court vers la sortie */
+    public ArrayList<Case> TrouverLeChemin(Case Sortie) throws Exception {
 
+        ArrayList<Case> File = new ArrayList<>();
+        ArrayList<Case> claim = new ArrayList<>();
+        Case current = Sortie;
+
+        File.add(current);
+
+        boolean recherche = true;
+        while (recherche){
+                System.out.println("RECHERCHE EN COURS");
+                ArrayList<Case> lesSuivants = getAllVoisinsParcours(current,1);
+                Case CaseMin = lesSuivants.get(0);
+                System.out.println(lesSuivants);
+                System.out.println("Curseur" + current.getPosX() + ";" + current.getPosY() + " " + current.getElement().toString());
+
+                /* Récupération du voisin avec le poids le plus faible */
+                if (lesSuivants.size() != 0){
+                    for (Case next: lesSuivants){
+                        if (next.getPoids() == 858585){
+                            recherche = false;
+                        }
+                        if (CaseMin.getPoids()>next.getPoids() && !(claim.contains(next))){
+                            CaseMin = next;
+                        }
+                    }
+                     claim.add(CaseMin);
+                     File.add(CaseMin);
+                     current=CaseMin;
+                     if (CaseMin.getPoids() == 858585){
+                         recherche = false;
+                     }
+                } else if (lesSuivants.size() == 1){
+                    claim.add(lesSuivants.get(0));
+                    File.add(lesSuivants.get(0));
+                    current=lesSuivants.get(0);
+                    if (lesSuivants.get(0).getPoids() == 858585){
+                        recherche = false;
+                    }
+                }
+                else{
+                    System.out.println("Bloqué en " + current.getPosX() + ";" + current.getPosY());
+                    File.remove(current);
+                    current = File.get(File.size());
+                    System.out.println("passage en " + current.getPosX() + ";" + current.getPosY());
+                }
+            }
+        return File;
+    }
+
+    /* Affiche le poids des cases avec le chemin le plus court vers la sortie */
+    public void afficherLabPoids() throws Exception {
 
         for (int i = 0; i <= this.getNbligne()-1 ; i++) {
             for (int j = 0; j <= this.getNbcolonne()-1 ; j++) {
@@ -740,18 +749,10 @@ public class Labyrinthe {
 
                     } else{
                         System.out.print(lc.getElement().toString() +"\t ");
-
                     }
                 }
-
-
-
             }
         }
-
     }
-
-
-
 }
 

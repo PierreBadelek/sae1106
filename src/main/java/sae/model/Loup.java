@@ -1,13 +1,12 @@
 package sae.model;
 import java.util.*;
 
+/* Classe enfant de Animal */
 public class Loup extends Animal {
-
 
     public Loup(Case lacase) {
         super(lacase);
         this.imageURL = "/loup.png";
-
     }
 
     public String toString(){
@@ -20,6 +19,5 @@ public class Loup extends Animal {
     public void deplacement() {
         // TODO implement here
     }
-
 }
 
